@@ -166,6 +166,7 @@ int main(int argc, char** argv)
     sensor_msgs::CameraInfo cam_info_msg;
     std_msgs::Header header;
     header.frame_id = frame_id;
+
     camera_info_manager::CameraInfoManager cam_info_manager(nh, camera_name, camera_info_url);
     // Get the saved camera info if any
     cam_info_msg = cam_info_manager.getCameraInfo();
@@ -179,6 +180,11 @@ int main(int argc, char** argv)
                 // Flip the image if necessary
                 if (flip_image)
                     cv::flip(frame, frame, flip_value);
+
+                // TODO correct timestamp
+                double timestamp_msec = cap.get(CV_CAP_PROP_POS_MSEC);
+                std::cout << "Reading stamp: " << timestamp_msec/1000 << std::endl;
+                header.stamp = ros::Time(timestamp_msec/1000);
                 msg = cv_bridge::CvImage(header, "bgr8", frame).toImageMsg();
                 // Create a default camera info if we didn't get a stored one on initialization
                 if (cam_info_msg.distortion_model == ""){

@@ -28,6 +28,8 @@ install(TARGETS video_stream
 
 install(PROGRAMS
   scripts/test_video_resource.py
+  src/video_file_streamer.py
+  src/video_to_bag.py
 
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
